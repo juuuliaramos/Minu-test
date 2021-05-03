@@ -3,6 +3,8 @@ const app = express();
 app.use(express.json());
 const fs = require('fs');
 
+const validador = require('gerador-validador-cpf')
+
 app.listen(3000);
 
 
@@ -10,6 +12,10 @@ app.listen(3000);
 function checkRequiredFields(req, res, next) {
   if (!req.body.cpf || !req.body.name || !req.body.email)  {
     return res.status(400).json({ error: 'CPF, name and Email are required' });
+  }
+
+  if (!validador.validate(req.body.cpf)){
+    return res.status(400).json({ error: 'Invalid CPF' });
   }
   return next();
 } 
